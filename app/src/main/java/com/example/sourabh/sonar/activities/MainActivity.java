@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     static String DISTRESS_NUMBER = "distress_number";
     static String MIN_DISTANCE_BEFORE_RESEND = "min_dist";
     static String MIN_TIME_BEFORE_RESEND = "min_time";
+    static String CUSTOM_MESSAGE = "custom_message";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

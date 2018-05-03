@@ -1,6 +1,5 @@
 package com.example.sourabh.sonar.activities;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -84,14 +83,7 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
                                         location.getLongitude() + ")";
                                 Log.d("debug",msg);
                                 if(requestMessagePermission()){
-                                    SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, Context.MODE_PRIVATE);
-                                    String distressNumber = sharedPreferences.getString(MainActivity.DISTRESS_NUMBER, null);
-                                    if(distressNumber != null) {
-                                        SmsManager smsManager = SmsManager.getDefault();
-                                        smsManager.sendTextMessage(distressNumber, null, msg, null, null );
-                                        Toast.makeText(getApplicationContext(), "Location sent (probably)", Toast.LENGTH_SHORT).show();
-                                    }
-
+                                    sendLocationMessage(msg);
                                 }
                             }
                         });
@@ -99,6 +91,25 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
             }catch (SecurityException exc){
                 exc.printStackTrace();
             }
+        }
+    }
+
+    void sendLocationMessage(String msg){
+        SharedPreferences preferences = getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, MODE_PRIVATE);
+        String customMessage = preferences.getString(MainActivity.CUSTOM_MESSAGE, null);
+        String finalMessage;
+        if(customMessage != null){
+            finalMessage = customMessage + " " + msg;
+        }else{
+            finalMessage = msg;
+        }
+        String distressNumber = preferences.getString(MainActivity.DISTRESS_NUMBER, null);
+        if(distressNumber != null) {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(distressNumber, null, finalMessage, null, null );
+            Toast.makeText(getApplicationContext(), "Location sent (probably)", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), "Set distress number in the settings", Toast.LENGTH_LONG).show();
         }
     }
 
