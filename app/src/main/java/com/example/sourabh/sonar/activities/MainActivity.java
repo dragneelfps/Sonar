@@ -3,8 +3,8 @@ package com.example.sourabh.sonar.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
@@ -12,6 +12,8 @@ public class MainActivity extends AppCompatActivity {
     static String MY_SHAREDPREFERENCES = "custom_prefs";
     static String FIRST_TIME_ACCESS = "first_time";
     static String DISTRESS_NUMBER = "distress_number";
+    static String MIN_DISTANCE_BEFORE_RESEND = "min_dist";
+    static String MIN_TIME_BEFORE_RESEND = "min_time";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
