@@ -45,7 +45,10 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
                 if(locationResult != null){
                     for(Location location : locationResult.getLocations()){
                         if(lastKnownLocation == null || lastKnownLocation.distanceTo(location) > minDistanceBetweenUpdates) {
-                            Log.d("debug", location.getLatitude() + ":" + location.getLongitude());
+                            String msg = "Last known location: (" + location.getLatitude() + "," +
+                                    location.getLongitude() + ")";
+                            Log.d("debug",msg);
+                            sendLocationMessage(msg);
                             lastKnownLocation = location;
                         }
                     }
@@ -123,5 +126,11 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
         }catch (SecurityException exc){
             exc.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mFusedLocaitonProvideClient.removeLocationUpdates(mLocationCallback);
     }
 }
