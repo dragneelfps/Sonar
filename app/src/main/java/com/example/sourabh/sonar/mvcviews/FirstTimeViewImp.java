@@ -19,12 +19,22 @@ public class FirstTimeViewImp implements FirstTimeView, View.OnClickListener {
     private OnContactPickListener mOnContactPickListener;
     private EditText mNumberInput;
     private Button mSaveButton;
+    private Button mChooseContactButton;
 
     public FirstTimeViewImp(LayoutInflater inflater, SetupActivity activity){
         mRootView = inflater.inflate(R.layout.first_time_layout, null, false);
         mNumberInput = mRootView.findViewById(R.id.number_input);
         mSaveButton = mRootView.findViewById(R.id.save_number_btn);
+        mChooseContactButton = mRootView.findViewById(R.id.choose_contact);
         mSaveButton.setOnClickListener(this);
+        mChooseContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnContactPickListener != null){
+                    mOnContactPickListener.onContactPick();
+                }
+            }
+        });
         mRefActivity = new WeakReference<>(activity);
     }
 
@@ -44,5 +54,14 @@ public class FirstTimeViewImp implements FirstTimeView, View.OnClickListener {
     @Override
     public View getRootView() {
         return mRootView;
+    }
+
+    @Override
+    public void updateDistressNumber(String phoneNo) {
+        mNumberInput.setText(normalizePhoneNo(phoneNo));
+    }
+
+    String normalizePhoneNo(String phoneNo){
+        return phoneNo.replaceAll("\\s+","");
     }
 }
