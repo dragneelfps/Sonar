@@ -1,11 +1,11 @@
 package com.example.sourabh.sonar.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -30,7 +30,7 @@ public class SetupActivity extends AppCompatActivity implements FirstTimeView.On
     @Override
     public void onContactPick(String contactNumber) {
         if(contactNumber.length() == 10){
-            SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             Log.d("debug","Saving number: " + contactNumber);
             editor.putString(MainActivity.DISTRESS_NUMBER, contactNumber);

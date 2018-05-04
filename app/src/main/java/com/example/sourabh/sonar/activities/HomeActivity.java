@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -30,7 +31,7 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         minDistanceBetweenUpdates = preferences.getFloat(MainActivity.MIN_DISTANCE_BEFORE_RESEND, 20f);
         minTimeBetweenUpdates = preferences.getLong(MainActivity.MIN_TIME_BEFORE_RESEND, 10);
         mHomeView = new HomeViewImp(getLayoutInflater(), this);
@@ -98,7 +99,7 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
     }
 
     void sendLocationMessage(String msg){
-        SharedPreferences preferences = getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String customMessage = preferences.getString(MainActivity.CUSTOM_MESSAGE, null);
         String finalMessage;
         if(customMessage != null){
