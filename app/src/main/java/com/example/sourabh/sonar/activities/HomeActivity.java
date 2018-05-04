@@ -1,5 +1,6 @@
 package com.example.sourabh.sonar.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -8,8 +9,12 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.sourabh.sonar.R;
+import com.example.sourabh.sonar.SettingsPreferences;
 import com.example.sourabh.sonar.activities.base.AbsPermissionActivity;
 import com.example.sourabh.sonar.mvcviews.HomeViewImp;
 import com.example.sourabh.sonar.mvcviews.base.HomeView;
@@ -25,17 +30,19 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
     private HomeView mHomeView;
     private FusedLocationProviderClient mFusedLocaitonProvideClient;
     private Location lastKnownLocation;
-    private float minDistanceBetweenUpdates = 20f; //20 meters
-    private long minTimeBetweenUpdates = 10; //10 sec
+    private float minDistanceBetweenUpdates; //in meteres
+    private long minTimeBetweenUpdates; //in minutes
+    private boolean isDistanceMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        minDistanceBetweenUpdates = preferences.getFloat(MainActivity.MIN_DISTANCE_BEFORE_RESEND, 20f);
-        minTimeBetweenUpdates = preferences.getLong(MainActivity.MIN_TIME_BEFORE_RESEND, 10);
+
+        updatePreferences();
+
         mHomeView = new HomeViewImp(getLayoutInflater(), this);
         setContentView(mHomeView.getRootView());
+
         requestLocationPermission();
         requestMessagePermission();
         mHomeView.setOnLocationSendListener(this);
@@ -45,7 +52,7 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
             public void onLocationResult(LocationResult locationResult) {
                 if(locationResult != null){
                     for(Location location : locationResult.getLocations()){
-                        if(lastKnownLocation == null || lastKnownLocation.distanceTo(location) > minDistanceBetweenUpdates) {
+                        if(lastKnownLocation == null || !isDistanceMode || lastKnownLocation.distanceTo(location) > minDistanceBetweenUpdates) {
                             String msg = "Last known location: (" + location.getLatitude() + "," +
                                     location.getLongitude() + ")";
                             Log.d("debug",msg);
@@ -58,7 +65,17 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
         };
         mLocationRequest = new LocationRequest();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(minTimeBetweenUpdates);
+        mLocationRequest.setInterval(minTimeBetweenUpdates*60);
+    }
+
+    void updatePreferences(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        minDistanceBetweenUpdates = Float.parseFloat(preferences.getString(MainActivity.MIN_DISTANCE_BEFORE_RESEND, "20"));
+        minTimeBetweenUpdates = Long.parseLong(preferences.getString(MainActivity.MIN_TIME_BEFORE_RESEND, "1"));
+        isDistanceMode = preferences.getBoolean(MainActivity.DISTANCE_MODE, false);
+        Log.d("debug","minDistance: " + minDistanceBetweenUpdates);
+        Log.d("debug","minTime: " + minTimeBetweenUpdates);
+        Log.d("debug","isDistanceMode: " + isDistanceMode);
     }
 
     @Override
@@ -133,5 +150,30 @@ public class HomeActivity extends AbsPermissionActivity implements HomeView.OnLo
     protected void onStop() {
         super.onStop();
         mFusedLocaitonProvideClient.removeLocationUpdates(mLocationCallback);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.settings_menu:
+                Intent settingsIntent = new Intent(this, SettingsPreferences.class);
+                startActivity(settingsIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updatePreferences();
+        mLocationRequest.setInterval(minTimeBetweenUpdates*60);
     }
 }

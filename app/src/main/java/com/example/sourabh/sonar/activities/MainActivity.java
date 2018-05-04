@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     static String MIN_DISTANCE_BEFORE_RESEND = "min_dist";
     static String MIN_TIME_BEFORE_RESEND = "min_time";
     static String CUSTOM_MESSAGE = "custom_message";
+    static String DISTANCE_MODE = "distance_mode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

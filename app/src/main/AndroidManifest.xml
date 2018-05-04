@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".activities.SetupActivity" />
         <activity android:name=".activities.HomeActivity"></activity>
+        <activity android:name=".SettingsPreferences" />
     </application>
 
 </manifest>

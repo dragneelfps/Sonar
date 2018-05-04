@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="distance_mode"
+        android:summary="Use Distance mode. (Default: Time mode)"
+        android:title="Distance Mode" />
+    <EditTextPreference
+        android:defaultValue="1"
+        android:key="min_time"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Sets the minimum time between each location broadcast in Sonar mode. (Minutes)"
+        android:title="Minimum Time" />
+    <EditTextPreference
+        android:defaultValue="20"
+        android:dependency="distance_mode"
+        android:key="min_dist"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Sets the minimum diplacement befroe resending the message.(Meteres)"
+        android:title="Minimum Distance" />
+    <EditTextPreference
+        android:key="custom_message"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Set a custom message to append to the location"
+        android:title="Custom Message" />
+</PreferenceScreen>
