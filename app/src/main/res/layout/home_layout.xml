@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,7 +17,8 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/distress_number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorAccent"/>
 
     <TextView
         android:id="@+id/distress_number"
@@ -29,7 +31,8 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/send_location_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorAccent"/>
 
     <Button
         android:id="@+id/send_location_btn"
