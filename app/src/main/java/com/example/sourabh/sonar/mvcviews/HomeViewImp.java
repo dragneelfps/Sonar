@@ -1,7 +1,7 @@
 package com.example.sourabh.sonar.mvcviews;
 
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +29,7 @@ public class HomeViewImp implements HomeView {
         mRootView = inflater.inflate(R.layout.home_layout, null, false);
         mOneTimeSendButton = mRootView.findViewById(R.id.send_location_btn);
         mSonarButton = mRootView.findViewById(R.id.sonar_location_btn);
-        SharedPreferences preferences = activity.getSharedPreferences(MainActivity.MY_SHAREDPREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
         String distressNumber = preferences.getString(MainActivity.DISTRESS_NUMBER, null);
         TextView distressNumberTextView = mRootView.findViewById(R.id.distress_number);
         if(distressNumber == null){
