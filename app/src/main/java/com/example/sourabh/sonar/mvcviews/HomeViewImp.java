@@ -1,5 +1,6 @@
 package com.example.sourabh.sonar.mvcviews;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.sourabh.sonar.R;
+import com.example.sourabh.sonar.SettingsPreferences;
 import com.example.sourabh.sonar.activities.HomeActivity;
 import com.example.sourabh.sonar.activities.MainActivity;
 import com.example.sourabh.sonar.mvcviews.base.HomeView;
@@ -26,6 +28,7 @@ public class HomeViewImp implements HomeView {
 
 
     public HomeViewImp(LayoutInflater inflater, final HomeActivity activity){
+        refActivity = new WeakReference<>(activity);
         mRootView = inflater.inflate(R.layout.home_layout, null, false);
         mOneTimeSendButton = mRootView.findViewById(R.id.send_location_btn);
         mSonarButton = mRootView.findViewById(R.id.sonar_location_btn);
@@ -64,6 +67,13 @@ public class HomeViewImp implements HomeView {
                 }
             });
         }
+        (mRootView.findViewById(R.id.settings)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(refActivity.get(), SettingsPreferences.class);
+                refActivity.get().startActivity(settingsIntent);
+            }
+        });
     }
 
     @Override
